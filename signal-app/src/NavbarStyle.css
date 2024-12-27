@@ -1,0 +1,246 @@
+.logo{
+    width:40px;
+    height: 40px;
+    margin-left: 20px;
+    align-self: center;
+    padding-top: 15px;
+}
+.center-itemslight{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1px solid white;
+}
+.center-itemsdark{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1px solid white;
+}
+.header-linkdark{
+    text-decoration: none;
+    color: white  ; 
+}
+.header-linklight{
+    text-decoration: none;
+    color: black  ; 
+}
+.header-link:hover{
+    cursor: pointer;
+}
+.navbar-items{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    border: 2px solid black;
+}
+.mode-img{    
+    width: 30px;
+    height: 30px;
+    padding-top: 5px;
+}
+.change-mode{
+    width: 30px;
+    padding-right: 10px;
+    background-color: white;
+}
+.change-modedark{
+    background-image: url('./images/wb_sunny_30dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    width:35px;
+    height:35px;
+    background-color: black;
+}
+.change-modedark:hover{
+    background-color: black;
+}
+.change-modelight{
+    background-image: url('./images/dark_mode_30dp_000000_FILL0_wght400_GRAD0_opsz24 (1).png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    width:35px;
+    height:35px;
+    background-color: white;
+}
+.change-modelight:hover{
+    background-color: white;
+}
+.right-items{
+    align-self: center;
+}
+.menu-icon{
+    width: 30px;
+    height:30px;
+}
+.menu-button {
+    background: none !important;
+    border: none;
+    cursor: pointer;
+  }
+.menu-button:hover {
+    background: none !important;
+    border: none;
+    cursor: pointer;
+  }
+  .menu-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .menu-icon {
+    width: 30px;
+    height: 30px;
+  }
+  /* Container for dropdown menu */
+.dropdown-menulight {
+    position: fixed;
+    top: 80px; /* Adjust for alignment with navbar */
+    left: 10px;
+    background-color: #ffffff; /* White background for light theme */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Elevated shadow for modern look */
+    border-radius: 8px; /* Rounded corners for elegance */
+    z-index: 1000;
+    padding: 5px 0; /* Compact padding */
+    width: 250px; /* Slightly wider for better readability */
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.3s ease, transform 0.3s ease; /* Smooth dropdown animation */
+    opacity: 0; /* Initial hidden state for animation */
+    transform: translateY(-20px); /* Slide-in effect */
+    visibility: hidden; /* Ensures the menu is not interactable when hidden */
+  }
+  .dropdown-menudark {
+    position: fixed;
+    top: 80px; /* Adjust for alignment with navbar */
+    left: 10px;
+    background-color: black; /* White background for light theme */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Elevated shadow for modern look */
+    border-radius: 8px; /* Rounded corners for elegance */
+    z-index: 1000;
+    padding: 5px 0; /* Compact padding */
+    width: 250px; /* Slightly wider for better readability */
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.3s ease, transform 0.3s ease; /* Smooth dropdown animation */
+    opacity: 0; /* Initial hidden state for animation */
+    transform: translateY(-20px); /* Slide-in effect */
+    visibility: hidden; /* Ensures the menu is not interactable when hidden */
+  }
+  .dropdown-menulight {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+  }
+  .dropdown-menudark {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+  }
+  
+  /* Styling for each menu item */
+  .dropdown-menulight button {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    background-color: transparent; /* Transparent for cleaner look */
+    color: #333; /* Dark text for contrast */
+    border: none; /* No borders for cleaner look */
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px; /* Standard text size */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+  }
+  
+  .dropdown-menudark button {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    background-color: transparent; /* Transparent for cleaner look */
+    color: #333; /* Dark text for contrast */
+    border: none; /* No borders for cleaner look */
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px; /* Standard text size */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+  }
+  .dropdown-menulight button:hover {
+    background-color: #f8f9fa; /* Light gray background on hover */
+    color: #000; /* Black text on hover */
+  }
+  
+  .dropdown-menulight button:focus {
+    outline: none;
+    background-color: #e9ecef; /* Slightly darker gray for focus */
+  }
+  
+  /* For anchor links inside the dropdown */
+  .dropdown-menulight a {
+    text-decoration: none;
+    display: block;
+    padding: 12px 20px;
+    color: #333;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 4px; /* Subtle rounding for better aesthetics */
+  }
+  .dropdown-menudark a {
+    text-decoration: none;
+    display: block;
+    padding: 12px 20px;
+    color: white;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    border-radius: 4px; /* Subtle rounding for better aesthetics */
+  }
+  
+  .dropdown-menulight a:hover {
+    background-color: #f0f0f0; /* Light hover effect */
+    color: #000; /* Darken text on hover */
+  }
+  .dropdown-menudark a:hover {
+    background-color: #202123; /* Light hover effect */
+    color: white; /* Darken text on hover */
+  }
+  
+  /* Menu item class */
+  .menu-item {
+    font-size: 1rem;
+    padding: 10px 0;
+    font-weight: 500;
+  }
+  
+  .dropdown-menulight.show {
+    animation: fadeIn 0.3s ease forwards;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  .center-itemslight .heading{
+    padding-top: 15px;
+    font-size: 1.8rem;
+
+  }
+  .center-itemsdark .heading{
+    padding-top: 15px;
+    font-size: 1.8rem;
+
+  }
+  .logo{
+    height: 40px;
+    padding-bottom: 9px;
+  }
+  

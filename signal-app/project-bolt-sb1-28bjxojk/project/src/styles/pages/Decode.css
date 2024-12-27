@@ -1,0 +1,37 @@
+.decode-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #111827;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.decode-description {
+  color: #6b7280;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.loading-text {
+  text-align: center;
+  color: #6b7280;
+  margin: 1rem 0;
+}
+
+.decoded-message {
+  margin-top: 1rem;
+}
+
+.decoded-title {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
+
+.decoded-content {
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-radius: 0.5rem;
+  white-space: pre-wrap;
+}

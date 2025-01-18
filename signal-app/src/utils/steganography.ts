@@ -12,12 +12,38 @@ export class EnhancedSteganography {
       .map(bit => parseInt(bit));
   }
 
-  private static embedBitInPixel(value: number, bit: number): number {
-    return (Math.floor(value / 2) * 2) + bit;
+  private static embedBitInCoefficient(value: number, bit: number): number {
+    // Preserve sign while embedding in least significant bit
+    const sign = Math.sign(value);
+    const absValue = Math.abs(value);
+    return sign * ((Math.floor(absValue / 2) * 2) + bit);
   }
 
-  private static extractBitFromPixel(value: number): number {
-    return value & 1;
+  private static extractBitFromCoefficient(value: number): number {
+    return Math.abs(value) & 1;
+  }
+
+  private static getNextEmbeddingLocation(index: number, coeffs: any): {
+    matrix: 'cA' | 'cH' | 'cV' | 'cD';
+    channel: number;
+    y: number;
+    x: number;
+  } {
+    // Distribute bits across all coefficient matrices and channels
+    const totalCoeffsPerMatrix = coeffs.cA[0].length * coeffs.cA[0][0].length;
+    const matrixIndex = Math.floor(index / totalCoeffsPerMatrix) % 4;
+    const channel = Math.floor((index / (totalCoeffsPerMatrix * 4))) % 3;
+    const position = index % totalCoeffsPerMatrix;
+    const y = Math.floor(position / coeffs.cA[0][0].length);
+    const x = position % coeffs.cA[0][0].length;
+
+    const matrices: Array<'cA' | 'cH' | 'cV' | 'cD'> = ['cA', 'cH', 'cV', 'cD'];
+    return {
+      matrix: matrices[matrixIndex],
+      channel,
+      y,
+      x
+    };
   }
 
   static async encodeMessage(
@@ -33,35 +59,37 @@ export class EnhancedSteganography {
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const dwtCoeffs = DWT.forward(imageData);
 
-
+    // Embed header (message length)
     const lengthBits = this.convertToBinaryArray(binaryMessage.length);
     for (let i = 0; i < this.HEADER_SIZE; i++) {
-      const y = Math.floor(i / dwtCoeffs.cA[0][0].length);
-      const x = i % dwtCoeffs.cA[0][0].length;
-      dwtCoeffs.cA[2][y][x] = this.embedBitInPixel(dwtCoeffs.cA[2][y][x], lengthBits[i]);
+      const { matrix, channel, y, x } = this.getNextEmbeddingLocation(i, dwtCoeffs);
+      dwtCoeffs[matrix][channel][y][x] = this.embedBitInCoefficient(
+        dwtCoeffs[matrix][channel][y][x],
+        lengthBits[i]
+      );
     }
 
     // Embed message bits
     const messageArray = binaryMessage.split('').map(bit => parseInt(bit));
-    let messageIndex = 0;
-
-    // Use simple LSB in blue channel coefficients after header
-    for (let i = this.HEADER_SIZE; i < this.HEADER_SIZE + messageArray.length; i++) {
-      const y = Math.floor(i / dwtCoeffs.cA[0][0].length);
-      const x = i % dwtCoeffs.cA[0][0].length;
+    for (let i = 0; i < messageArray.length; i++) {
+      const { matrix, channel, y, x } = this.getNextEmbeddingLocation(
+        i + this.HEADER_SIZE,
+        dwtCoeffs
+      );
       
-      if (y < dwtCoeffs.cA[2].length && x < dwtCoeffs.cA[2][0].length) {
-        dwtCoeffs.cA[2][y][x] = this.embedBitInPixel(
-          dwtCoeffs.cA[2][y][x],
-          messageArray[messageIndex++]
+      if (y < dwtCoeffs[matrix][channel].length && 
+          x < dwtCoeffs[matrix][channel][0].length) {
+        dwtCoeffs[matrix][channel][y][x] = this.embedBitInCoefficient(
+          dwtCoeffs[matrix][channel][y][x],
+          messageArray[i]
         );
       }
     }
 
-    // Apply inverse DWT
+    // Apply inverse DWT with modified coefficients
     const modifiedImageData = DWT.inverse(dwtCoeffs, image.width, image.height);
     ctx.putImageData(modifiedImageData, 0, 0);
-    
+
     return canvas.toDataURL();
   }
 
@@ -78,20 +106,24 @@ export class EnhancedSteganography {
     // Extract message length
     let lengthBits = '';
     for (let i = 0; i < this.HEADER_SIZE; i++) {
-      const y = Math.floor(i / dwtCoeffs.cA[0][0].length);
-      const x = i % dwtCoeffs.cA[0][0].length;
-      lengthBits += this.extractBitFromPixel(dwtCoeffs.cA[2][y][x]);
+      const { matrix, channel, y, x } = this.getNextEmbeddingLocation(i, dwtCoeffs);
+      lengthBits += this.extractBitFromCoefficient(dwtCoeffs[matrix][channel][y][x]);
     }
     const messageLength = parseInt(lengthBits, 2);
 
     // Extract message bits
     let binaryMessage = '';
-    for (let i = this.HEADER_SIZE; i < this.HEADER_SIZE + messageLength; i++) {
-      const y = Math.floor(i / dwtCoeffs.cA[0][0].length);
-      const x = i % dwtCoeffs.cA[0][0].length;
-      
-      if (y < dwtCoeffs.cA[2].length && x < dwtCoeffs.cA[2][0].length) {
-        binaryMessage += this.extractBitFromPixel(dwtCoeffs.cA[2][y][x]);
+    for (let i = 0; i < messageLength; i++) {
+      const { matrix, channel, y, x } = this.getNextEmbeddingLocation(
+        i + this.HEADER_SIZE,
+        dwtCoeffs
+      );
+
+      if (y < dwtCoeffs[matrix][channel].length && 
+          x < dwtCoeffs[matrix][channel][0].length) {
+        binaryMessage += this.extractBitFromCoefficient(
+          dwtCoeffs[matrix][channel][y][x]
+        );
       }
     }
 
